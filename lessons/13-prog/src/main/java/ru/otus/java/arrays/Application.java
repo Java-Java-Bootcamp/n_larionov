@@ -10,11 +10,12 @@ public class Application {
         task.reverseArray(array);
         task.average(array);
 
-        String left = "";
-        String right = "";
+        String left = "ab   c   d    ";
+        String right = "cdab     ";
         Anagram anagram = new Anagram();
         boolean result = anagram.check(left, right);
 
         System.out.println(result);
+
     }
 }
