@@ -1,24 +1,4 @@
-### get product
-POST http://localhost:8082/api/add/product
-Content-Type: application/json
-
-{
-  "model": "ballat",
-  "manufacturer": "ballat",
-  "description": "ballat",
-  "rating": 5,
-  "votes": 1
-}
-
-### get product
-POST http://localhost:8082/api/add/product?model=ball&manufacturer=ball&description=ball&votes=1&rating=1
-
-### add new store to the store list
-POST http://localhost:8082/api/add/store
-Content-Type: application/json
-
-{
-  "name": "yandex",
-  "rating": 4,
-  "votes": 1
-}
+## Admin
+GET https://httpbin.org/ip
+Accept: application/json
+##

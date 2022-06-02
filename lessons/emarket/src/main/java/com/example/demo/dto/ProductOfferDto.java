@@ -1,10 +1,6 @@
 package com.example.demo.dto;
 
-import lombok.AllArgsConstructor;
+import java.math.BigDecimal;
 
-@AllArgsConstructor
-public class ProductOfferDto {
-    private final ProductDto product;
-    private final StoreDto store;
-    private final int amount;
+public record ProductOfferDto(long id, ProductDto product, StoreDto store, BigDecimal price, int amount) {
 }

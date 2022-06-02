@@ -1,12 +1,6 @@
 package com.example.demo.dto;
 
-import lombok.AllArgsConstructor;
 
-@AllArgsConstructor
-public class ProductDto {
-    private final String model;
-    private final String manufacturer;
-    private final String description;
-    private final Integer rating;
-    private final Integer votes;
+
+public record ProductDto(int id, String name, String model, String manufacturer, String description, float rating) {
 }
