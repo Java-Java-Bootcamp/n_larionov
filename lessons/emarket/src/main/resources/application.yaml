@@ -9,7 +9,5 @@ spring:
     clean-on-validation-error: true
     default-schema: emarket
 
-
-
 server:
   port: 8082

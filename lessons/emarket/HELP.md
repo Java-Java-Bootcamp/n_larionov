@@ -1,11 +1,14 @@
 # Read Me First
+
 The following was discovered as part of building this project:
 
-* The original package name 'com.otus.final.project.emarket' is invalid and this project uses 'com.example.demo' instead.
+* The original package name 'com.otus.final.project.emarket' is invalid and this project uses 'com.example.demo'
+  instead.
 
 # Getting Started
 
 ### Reference Documentation
+
 For further reference, please consider the following sections:
 
 * [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
@@ -17,6 +20,7 @@ For further reference, please consider the following sections:
 * [JDBC API](https://docs.spring.io/spring-boot/docs/2.7.0/reference/htmlsingle/#boot-features-sql)
 
 ### Guides
+
 The following guides illustrate how to use some features concretely:
 
 * [Building a RESTful Web service](https://spring.io/guides/gs/rest-service/)
