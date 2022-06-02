@@ -55,7 +55,7 @@ public class AdminServiceImpl implements AdminService {
                 .addValue("description", productDto.description())
                 .addValue("id", productId);
         if (jdbcTemplate.update(UPDATE_PRODUCT, sps) == 0) {
-            throw new AdminException(String.format("Product with id=%s absent in table", productId));
+            throw new AdminException(String.format("Product with this id=%s out of table", productId));
         }
     }
 
@@ -74,7 +74,7 @@ public class AdminServiceImpl implements AdminService {
     public int addStore(StoreDto storeDto) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         final SqlParameterSource sps = new MapSqlParameterSource()
-                .addValue("name", storeDto.getName());
+                .addValue("name", storeDto.name());
         jdbcTemplate.update(INSERT_STORE, sps, keyHolder);
         if (keyHolder.getKeys() == null || keyHolder.getKeys().get("id") == null) {
             throw new AdminException("In table exist store with same name ");
@@ -85,7 +85,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void updateStore(long storeId, StoreDto storeDto) {
         final SqlParameterSource sps = new MapSqlParameterSource()
-                .addValue("name", storeDto.getName())
+                .addValue("name", storeDto.name())
                 .addValue("id", storeId);
 
         if (jdbcTemplate.update(UPDATE_STORE, sps) == 0) {
