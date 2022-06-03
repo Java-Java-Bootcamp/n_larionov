@@ -1,6 +1,7 @@
 package com.example.demo.web.controller;
 
 import com.example.demo.dto.ProductDto;
+import com.example.demo.dto.StoreDto;
 import com.example.demo.service.api.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -10,12 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/admin/api")
@@ -47,6 +43,23 @@ public class AdminController {
     public void updateProduct(@PathVariable("id")long productId, @RequestBody ProductDto productDto) {
         adminService.updateProduct(productId, productDto);
     }
+
+
+
+    @Operation(summary = "Remove product from database")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "product was removed", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ProductDto.class))}),
+            @ApiResponse(responseCode = "401", description = "Product with current id doesn't present in the table", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ProductDto.class))})
+    })
+    @DeleteMapping(path = "/product/{id}/delete", consumes = "application/json")
+    public void deleteProduct(@PathVariable("id")long productId, @RequestBody ProductDto productDto) {
+        adminService.deleteProduct(productId);
+    }
+
+
+
 
     // add new product to the product list by store
 }
