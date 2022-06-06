@@ -44,8 +44,6 @@ public class AdminController {
         adminService.updateProduct(productId, productDto);
     }
 
-
-
     @Operation(summary = "Remove product from database")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "product was removed", content = {
@@ -58,10 +56,42 @@ public class AdminController {
         adminService.deleteProduct(productId);
     }
 
+    @Operation(summary = "Add new Store")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Add the product", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ProductDto.class))}),
+            @ApiResponse(responseCode = "409", description = "Can add  duplicate product", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ProductDto.class))})
+    })
+    @PostMapping(value = "/store/add", consumes = "application/json")
+    public ResponseEntity<Long> addStore(@RequestBody StoreDto storeDto) {
+        long id = adminService.addStore(storeDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(id);
+    }
 
+    @Operation(summary = "Update existing Store")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "product is updated", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ProductDto.class))}),
+            @ApiResponse(responseCode = "401", description = "Product with current id is absent in table", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ProductDto.class))})
+    })
+    @PatchMapping(path = "/store/{id}/update", consumes = "application/json")
+    public void updateStore(@PathVariable("id")long storeId, @RequestBody StoreDto storeDto) {
+        adminService.updateStore(storeId, storeDto);
+    }
 
-
-    // add new product to the product list by store
+    @Operation(summary = "Remove Store from database")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Store was removed", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ProductDto.class))}),
+            @ApiResponse(responseCode = "401", description = "Store with current ID doesn't present in the table", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ProductDto.class))})
+    })
+    @DeleteMapping(path = "/store/{id}/delete", consumes = "application/json")
+    public void deleteStore(@PathVariable("id")long storeId, @RequestBody StoreDto productDto) {
+        adminService.deleteStore(storeId);
+    }
 }
 
 
