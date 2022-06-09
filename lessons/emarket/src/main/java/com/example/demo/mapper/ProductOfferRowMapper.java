@@ -1,8 +1,8 @@
 package com.example.demo.mapper;
 
-import com.example.demo.dto.ProductDto;
-import com.example.demo.dto.ProductOfferDto;
-import com.example.demo.dto.StoreDto;
+import com.example.demo.entity.ProductEntity;
+import com.example.demo.entity.ProductOfferEntity;
+import com.example.demo.entity.StoreEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -12,19 +12,21 @@ import java.sql.SQLException;
 
 @Component
 @RequiredArgsConstructor
-public class ProductOfferRowMapper extends AbstractEmarketRowMapper<ProductOfferDto> {
+public class ProductOfferRowMapper extends AbstractEmarketRowMapper<ProductOfferEntity> {
     private final ProductRowMapper productRowMapper;
     private final StoreRowMapper storeRowMapper;
 
 
     @Override
-    public ProductOfferDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+    public ProductOfferEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
         int id = rs.getInt(getColumnNameWithPrefix("id"));
         int amount = rs.getInt(getColumnNameWithPrefix("quantity"));
+        int productId = rs.getInt(getColumnNameWithPrefix("product_id"));
+        int storeId = rs.getInt(getColumnNameWithPrefix("store_id"));
         BigDecimal price = new BigDecimal(rs.getString(getColumnNameWithPrefix("price")));
-        ProductDto productDto = productRowMapper.mapRow(rs, rowNum);
-        StoreDto storeDto = storeRowMapper.mapRow(rs, rowNum);
-        return new ProductOfferDto(id, productDto, storeDto, price, amount);
+        ProductEntity productEntity = productRowMapper.mapRow(rs, rowNum);
+        StoreEntity storeEntity = storeRowMapper.mapRow(rs, rowNum);
+        return new ProductOfferEntity(id, productId, storeId, productEntity, storeEntity, price, amount);
     }
 
     @Override

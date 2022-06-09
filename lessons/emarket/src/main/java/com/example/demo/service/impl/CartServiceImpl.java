@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.converter.EntityToDtoConverter;
 import com.example.demo.dto.ProductOfferDto;
 import com.example.demo.exception.CartException;
 import com.example.demo.service.api.CartService;
@@ -12,12 +13,14 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class CartServiceImpl implements CartService {
     private final Map<String, Map<Long, Integer>> carts = new HashMap<>();
     private final DatabaseService databaseService;
+    private final EntityToDtoConverter converter;
 
     @Override
     public void addOfferToCart(String userName, Long offerId, Integer amount) {
@@ -43,7 +46,9 @@ public class CartServiceImpl implements CartService {
         if (cart == null || cart.isEmpty()) {
             throw new RuntimeException("You cart is empty");
         }
-        List<ProductOfferDto> invalidProductOfferDto = databaseService.validateCart(cart);
+        List<ProductOfferDto> invalidProductOfferDto = databaseService.validateCart(cart).stream()
+                .map(converter::convert)
+                .collect(Collectors.toList());
         if (!invalidProductOfferDto.isEmpty()) {
             return invalidProductOfferDto;
         }
@@ -64,9 +69,10 @@ public class CartServiceImpl implements CartService {
     @Override
     public List<ProductOfferDto> getUserCart(String userName) {
         if (carts.containsKey(userName) && !carts.get(userName).isEmpty()) {
-            return databaseService.getProductOfferInCart(carts.get(userName));
+            return databaseService.getProductOfferInCart(carts.get(userName)).stream()
+                    .map(converter::convert)
+                    .collect(Collectors.toList());
         }
         return null;
     }
-
 }

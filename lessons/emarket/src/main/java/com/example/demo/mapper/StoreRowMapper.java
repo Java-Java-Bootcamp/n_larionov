@@ -1,19 +1,20 @@
 package com.example.demo.mapper;
 
-import com.example.demo.dto.StoreDto;
+import com.example.demo.entity.StoreEntity;
 import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Component
-public class StoreRowMapper extends AbstractEmarketRowMapper<StoreDto> {
+public class StoreRowMapper extends AbstractEmarketRowMapper<StoreEntity> {
     @Override
-    public StoreDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+    public StoreEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
         int id = rs.getInt(getColumnNameWithPrefix("id"));
         String name = rs.getString(getColumnNameWithPrefix("name"));
-        float rating = calculateRating(rs);
-        return new StoreDto(id, name, rating);
+        int score = rs.getInt(getColumnNameWithPrefix("score"));
+        int votes = rs.getInt(getColumnNameWithPrefix("votes"));
+        return new StoreEntity(id, name, score, votes);
     }
 
     @Override

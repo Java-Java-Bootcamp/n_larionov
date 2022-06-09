@@ -1,8 +1,15 @@
 package com.example.demo.web.controller;
 
+import com.example.demo.dto.ProductDto;
 import com.example.demo.dto.ProductOfferDto;
+import com.example.demo.dto.StoreDto;
 import com.example.demo.service.api.CartService;
 import com.example.demo.service.api.EmarketService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,17 +26,29 @@ public class CustomerController {
 
     // catalog and vote api
 
+    @Operation(summary = "Get product offers ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "get product offer list")
+    })
     @GetMapping("/catalog")
     public List<ProductOfferDto> getProductOffers() {
         return emarketService.getProductOfferList();
     }
 
+    @Operation(summary = "Vote store")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Voted 4 store")
+    })
     @PutMapping("/vote/store")
     public ResponseEntity<Object> storeVote(@RequestParam("id") long storeId, @RequestParam("score") int score) {
         emarketService.voteForStore(storeId, score);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
+    @Operation(summary = "Vote product")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Voted for product")
+    })
     @PutMapping("/vote/product")
     public ResponseEntity<Object> productVote(@RequestParam("id") long productId, @RequestParam("score") int score) {
         emarketService.voteForProduct(productId, score);
@@ -37,7 +56,6 @@ public class CustomerController {
     }
 
     //Cart api
-
     @PutMapping("/cart/{userName}/{productOfferId}")
     public ResponseEntity<Object> addProductToCart(@PathVariable("userName") String userName,
                                                    @PathVariable("productOfferId") long productOfferId,
@@ -68,7 +86,7 @@ public class CustomerController {
 
     @PostMapping("/cart/{userName}/checkout")
     public ResponseEntity<Object> userCartCheckout(@PathVariable("userName") String userName) {
-        userCartCheckout(userName);
+        cartService.checkoutUserCart(userName);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 }

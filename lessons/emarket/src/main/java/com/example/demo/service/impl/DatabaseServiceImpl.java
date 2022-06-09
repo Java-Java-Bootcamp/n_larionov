@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.dto.ProductOfferDto;
+import com.example.demo.entity.ProductOfferEntity;
 import com.example.demo.exception.NotFoundEmarketException;
 import com.example.demo.mapper.ProductOfferRowMapper;
 import com.example.demo.service.api.DatabaseService;
@@ -38,13 +39,13 @@ public class DatabaseServiceImpl implements DatabaseService {
     private final ProductOfferRowMapper rowMapper;
 
     @Override
-    public List<ProductOfferDto> getProductOfferList() {
+    public List<ProductOfferEntity> getProductOfferList() {
         return jdbcTemplate.query(GET_PRODUCT_OFFER, rowMapper);
     }
 
     @Override
     @Transactional
-    public List<ProductOfferDto> validateCart(Map<Long, Integer> cartProductOfferIdAmount) {
+    public List<ProductOfferEntity> validateCart(Map<Long, Integer> cartProductOfferIdAmount) {
         String sql = cartProductOfferIdAmount.entrySet().stream()
                 .map(entry -> String.format(SELECT_PRODUCT_OFFER_ID, entry.getKey(), entry.getValue()))
                 .collect(Collectors.joining(UNION));
@@ -73,16 +74,17 @@ public class DatabaseServiceImpl implements DatabaseService {
     }
 
     @Override
-    public List<ProductOfferDto> getProductOfferInCart(Map<Long, Integer> cartProductOfferIdAmount) {
+    public List<ProductOfferEntity> getProductOfferInCart(Map<Long, Integer> cartProductOfferIdAmount) {
         return jdbcTemplate.query(GET_PRODUCTOFFER_BY_IDS, rowMapper, cartProductOfferIdAmount.keySet()).stream()
-                .filter(productOfferDto -> cartProductOfferIdAmount.containsKey(productOfferDto.id()))
-                .map(productOfferDto -> {
-                    Integer amount = cartProductOfferIdAmount.get(productOfferDto.id());
-                    if (amount < productOfferDto.amount()) {
-                       return new ProductOfferDto(productOfferDto.id(), productOfferDto.product(),
-                               productOfferDto.store(), productOfferDto.price(), productOfferDto.amount());
+                .filter(productOfferEntity -> cartProductOfferIdAmount.containsKey(productOfferEntity.id()))
+                .map(productOfferEntity -> {
+                    Integer amount = cartProductOfferIdAmount.get(productOfferEntity.id());
+                    if (amount < productOfferEntity.amount()) {
+                       return new ProductOfferEntity(productOfferEntity.id(), productOfferEntity.productId(),
+                               productOfferEntity.storeId(), productOfferEntity.product(), productOfferEntity.store(),
+                               productOfferEntity.price(), productOfferEntity.amount());
                     } else {
-                        return productOfferDto;
+                        return productOfferEntity;
                     }
                 })
                 .collect(Collectors.toList());

@@ -1,6 +1,7 @@
 package com.example.demo.mapper;
 
 import com.example.demo.dto.ProductDto;
+import com.example.demo.entity.ProductEntity;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
@@ -8,16 +9,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Component
-public class ProductRowMapper extends  AbstractEmarketRowMapper<ProductDto> {
+public class ProductRowMapper extends  AbstractEmarketRowMapper<ProductEntity> {
     @Override
-    public ProductDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+    public ProductEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
         int id = rs.getInt(getColumnNameWithPrefix("id"));
         String name = rs.getString(getColumnNameWithPrefix("name"));
         String model = rs.getString(getColumnNameWithPrefix("model"));
         String manufacturer = rs.getString(getColumnNameWithPrefix("manufacturer"));
         String description = rs.getString(getColumnNameWithPrefix("description"));
-        float rating = calculateRating(rs);
-        return new ProductDto(id, name, model, manufacturer, description, rating);
+        int score = rs.getInt(getColumnNameWithPrefix("score"));
+        int votes = rs.getInt(getColumnNameWithPrefix("votes"));
+        return new ProductEntity(id, name, model, manufacturer, description, score, votes);
     }
 
     @Override
